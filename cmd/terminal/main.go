@@ -9,7 +9,7 @@ import (
 
 func main () {
 	// Asks for the URL
-	input, err := service.ReadString(os.Stdin, "Ingresa el enlace: ")
+	input, err := service.ReadString(os.Stdin, "Enter a link: ")
 
 	// Error
 	if err != nil {
@@ -18,7 +18,7 @@ func main () {
 	}
 	
 	// Succes
-	png, err := qrcode.Encode(input, qrcode.Medium, 256)
+	qr, err := qrcode.Encode(input, qrcode.Medium, 256)
 
 		// Error generating QR code
 		if err != nil {
@@ -26,5 +26,6 @@ func main () {
 		}
 
 		// Succes
-		fmt.Print("qr:\n", png)
+		os.WriteFile("test.png", qr, 0644)
+		fmt.Println("QR Generated succesfully O_o")
 }
