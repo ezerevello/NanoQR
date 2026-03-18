@@ -3,10 +3,10 @@ FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
-# 2. Only copy the dependency managers
+# Only copy the dependency managers
 COPY go.mod go.sum ./
 
-# 3. Download the images from internet
+# Download the images from internet
 RUN go mod download
 
 COPY . .
