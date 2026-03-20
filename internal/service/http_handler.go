@@ -44,13 +44,17 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 			qrRecoverLevel = qrcode.Highest
 		}
 
-		// Then define the size limits:
+		// Then define the size limits & default:
+		if entryData.Size <= 0 {
+			entryData.Size = 256
+		}
 		if entryData.Size < 41 {
 			entryData.Size = 41
 		}
 		if entryData.Size > 2048 {
 			entryData.Size = 2048
 		}
+
 
 		// Now we can create the QR without worry.
 		qr, err := qrcode.Encode(entryData.Input, qrRecoverLevel, entryData.Size)
