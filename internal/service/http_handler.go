@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"encoding/json"
 	"encoding/base64"
-	qrcode "github.com/skip2/go-qrcode"
 )
+
+// Create qrService variable for QRService interface with DefualtQRService implementation
+var qrService QRService = &DefaultQRService{}
 
 func QRhandler (w http.ResponseWriter, r *http.Request) {
 
@@ -29,35 +31,8 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// If match, first we declare the entryData.RecoverLevel default value:
-		qrRecoverLevel := qrcode.Medium
-
-		// Then specify the levels:
-		switch entryData.RecoverLevel {
-		case "low":
-			qrRecoverLevel = qrcode.Low
-		case "medium":
-			qrRecoverLevel = qrcode.Medium
-		case "high":
-			qrRecoverLevel = qrcode.High
-		case "highest":
-			qrRecoverLevel = qrcode.Highest
-		}
-
-		// Then define the size limits & default:
-		if entryData.Size <= 0 {
-			entryData.Size = 256
-		}
-		if entryData.Size < 41 {
-			entryData.Size = 41
-		}
-		if entryData.Size > 2048 {
-			entryData.Size = 2048
-		}
-
-
-		// Now we can create the QR without worry.
-		qr, err := qrcode.Encode(entryData.Input, qrRecoverLevel, entryData.Size)
+		// If math, create the QR:
+		qr, err := qrService.Generate(entryData.Input, entryData.Size, entryData.RecoverLevel)
 
 			// Error generating QR:
 			if err != nil {
