@@ -134,7 +134,7 @@ func CLIHandler(service QRService, input string) {
 
 // Usage
 qrService := &DefaultQRService{}
-CLIHandler(qrService, "Hello World")
+CLIHandler(qrService, "https://google.com")
 ```
 
 -----
