@@ -50,7 +50,7 @@ To try it out quickly, you can run the binary directly with go in your terminal
 ```bash
 go run cmd/api/main.go
 ```
-or
+Or
 
 ### Run with Docker
 ```bash
@@ -60,11 +60,16 @@ docker run -p 8080:8080 nanoqr
 
 The QR generator service will be listening at: `http://localhost:8080/api/qr`
 
-➡️ For a quick test in terminal, you can run:
+➡️ For a quick test in terminal, you can run (linux):
 ```bash
 curl -X POST http://localhost:8080/api/qr \
 -H "Content-Type: application/json" \
 -d '{"input": "https://google.com", "size": 256, "recoverLevel": "medium"}'\
+```
+
+➡️ For windows (cmd):
+```cmd
+curl -X POST http://localhost:8080/api/qr -H "Content-Type: application/json" -d "{\"input\": \"https://google.com\", \"size\": 256, \"recoverLevel\": \"medium\"}" 
 ```
 
 -----
