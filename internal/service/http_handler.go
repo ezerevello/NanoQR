@@ -32,7 +32,7 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 		}
 
 		// If math, create the QR:
-		qr, err := qrService.Generate(entryData.Input, entryData.Size, entryData.RecoverLevel)
+		qr, finalSize, finalRecoverLevel, err := qrService.Generate(entryData.Input, entryData.Size, entryData.RecoverLevel)
 
 			// Error generating QR:
 			if err != nil {
@@ -51,8 +51,8 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 		"status": "success",
 		"info": map[string]any{
 			"input": entryData.Input,
-			"size": entryData.Size,
-			"recoveryLevel": entryData.RecoverLevel,
+			"size": finalSize,
+			"recoveryLevel": finalRecoverLevel,
 
 		},
 		"qr": qrBase64,
