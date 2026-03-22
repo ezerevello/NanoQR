@@ -1,14 +1,15 @@
-package service
+package handlers
 
 import (
 	"NanoQR/internal/model"
+	"NanoQR/internal/service"
 	"net/http"
 	"encoding/json"
 	"encoding/base64"
 )
 
 // Create qrService variable for QRService interface with DefualtQRService implementation
-var qrService QRService = &DefaultQRService{}
+var qrService service.QRService = &service.DefaultQRService{}
 
 func QRhandler (w http.ResponseWriter, r *http.Request) {
 
@@ -58,7 +59,7 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 		"info": map[string]any{
 			"input": entryData.Input,
 			"size": finalSize,
-			"recoveryLevel": finalRecoverLevel,
+			"recoverLevel": finalRecoverLevel,
 
 		},
 		"qr": qrBase64,

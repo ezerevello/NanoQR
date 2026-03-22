@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"fmt"
 	"log"
-	"NanoQR/internal/service"
+	"NanoQR/internal/handlers"
 )
 
 func main () {
 	// Any request for "api/qr" goes to service.QRhandler:
-	http.HandleFunc("/api/qr", service.QRhandler)
+	http.HandleFunc("/api/qr", handlers.QRhandler)
 
 	// This endpoint is for test the API
     http.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
