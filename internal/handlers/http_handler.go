@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"encoding/base64"
+    "strings"
 )
 
 // Create qrService variable for QRService interface with DefualtQRService implementation
@@ -33,7 +34,7 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 		}
 
 		// (local handler error) If input is empty: 
-		if entryData.Input == "" {
+		if strings.TrimSpace(entryData.Input) == "" {
 		http.Error(w, "Input cannot be empty", http.StatusBadRequest)
 		return
 		}

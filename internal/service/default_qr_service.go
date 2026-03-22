@@ -2,6 +2,7 @@ package service
 
 import (
 	qrcode "github.com/skip2/go-qrcode"
+    "strings"
 
 )
 
@@ -14,7 +15,7 @@ func (s *DefaultQRService) Generate(input string, size int, recoverLevel string)
     finalRecoverLevel := recoverLevel
 
     // Defaults for recoverLevel
-    if recoverLevel == "" {
+    if strings.TrimSpace(recoverLevel) == "" {
         finalRecoverLevel = "medium"
     }
 
