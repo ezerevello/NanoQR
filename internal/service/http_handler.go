@@ -12,14 +12,14 @@ var qrService QRService = &DefaultQRService{}
 
 func QRhandler (w http.ResponseWriter, r *http.Request) {
 
+	// Define entryData as the JsonRequest struct in model/model.go
+	var entryData model.JsonRequest
+
 	// If the method isn't POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Not a valid method. Use POST", http.StatusMethodNotAllowed)
 		return
 	}
-
-	// Define entryData as the JsonRequest struct in model/model.go
-	var entryData model.JsonRequest
 
 	// Decode the json file and forward the data to entryData (model.JsonRequest).
 	// With "err :=" we are checking if it match with the struct model.
@@ -29,6 +29,12 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return
+		}
+
+		// (local handler error) If input is empty: 
+		if entryData.Input == "" {
+		http.Error(w, "Input cannot be empty", http.StatusBadRequest)
+		return
 		}
 
 		// If math, create the QR:
