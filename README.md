@@ -112,31 +112,65 @@ curl -X POST http://localhost:8080/api/qr -H "Content-Type: application/json" -d
 }
 ```
 
+----
 
-### CORS Middleware
+### CORS Middleware (HTTP)
 
-NanoQR includes a CORS middleware to allow secure cross-origin requests from your web applications. This middleware automatically adds the necessary CORS headers to responses and handles preflight (OPTIONS) requests for endpoints like `/api/qr`.
+NanoQR includes a CORS middleware to allow secure cross-origin requests from your web applications.
 
 #### How it works
 
-- The CORS middleware checks the `Origin` header of incoming requests.
-- If the origin is allowed (see `internal/handlers/http_handler.go`), it sets the following headers:
-  - `Access-Control-Allow-Origin`
-  - `Access-Control-Allow-Headers`
-  - `Access-Control-Allow-Methods`
-  - `Content-Type`
+First, the `Origin` header of incoming requests (outside of the middleware) is checked:
+```go
+var allowedOrigins = []string {
+	"https://nanoqr-web.vercel.app",
+	"http://localhost:5173",
+	"https://another-web.com",
+}
+
+func isOriginAllowed(origin string) bool {
+
+	for _, o := range allowedOrigins {
+		if o == origin {
+			return true
+		}
+	}
+	return false
+
+}
+```
+_The URLs are examples; simply replace them._
+
+- If the origin is allowed, it sets the headers.
 - For preflight (OPTIONS) requests, it responds with status 204 and the appropriate headers, without invoking the main handler.
 - For POST requests, it allows the request to proceed to the QR handler as usual.
 
-#### Example:
-
+#### Func:
 ```go
-http.Handle("/api/qr", handlers.CORSMiddleware(http.HandlerFunc(handlers.QRhandler)))
+func CORSMiddleware(next http.Handler) http.Handler {
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Add CORS headers
+		origin := r.Header.Get("Origin")
+		if isOriginAllowed(origin) {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+			w.Header().Set("Content-Type", "application/json")
+		}
+
+		// Preflight
+        if r.Method == http.MethodOptions {
+            w.WriteHeader(http.StatusNoContent)
+            return
+        }
+
+		// Call next handler (QRhandler)
+		next.ServeHTTP(w, r)
+	})
+
+}
 ```
-
-#### Customizing Allowed Origins
-
-To allow other origins, edit the logic in `CORSMiddleware` inside `internal/handlers/http_handler.go`.
 
 -----
 
