@@ -9,7 +9,7 @@ import (
 
 func main () {
 	// Any request for "api/qr" goes to service.QRhandler:
-	http.HandleFunc("/api/qr", handlers.QRhandler)
+	http.Handle("/api/qr", handlers.CORSMiddleware(http.HandlerFunc(handlers.QRhandler)))
 
 	// This endpoint is for test the API
     http.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {

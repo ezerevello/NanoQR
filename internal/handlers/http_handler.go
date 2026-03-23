@@ -12,7 +12,31 @@ import (
 // Create qrService variable for QRService interface with DefualtQRService implementation
 var qrService service.QRService = &service.DefaultQRService{}
 
+func CORSMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Add CORS headers
+		origin := r.Header.Get("Origin")
+		if origin == "https://your-web.com" || origin == "https://another-web.com" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+			w.Header().Set("Content-Type", "application/json")
+		}
+
+		// Preflight
+        if r.Method == http.MethodOptions {
+            w.WriteHeader(http.StatusNoContent)
+            return
+        }
+
+		// Call next handler (QRhandler)
+		next.ServeHTTP(w, r)
+	})
+}
+
 func QRhandler (w http.ResponseWriter, r *http.Request) {
+	
+	
 
 	// Define entryData as the JsonRequest struct in model/model.go
 	var entryData model.JsonRequest
@@ -48,24 +72,21 @@ func QRhandler (w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			// Succes:
-			w.Header().Set("Content-Type", "application/json")
+			// Succes: we encode the QR bytes to Base64:
+			qrBase64 := base64.StdEncoding.EncodeToString(qr)
 
-	// After success, we encode the QR bytes to Base64:
-	qrBase64 := base64.StdEncoding.EncodeToString(qr)
+			// Then build the response for the client:
+			response := map[string]any{
+				"status": "success",
+				"info": map[string]any{
+					"input": entryData.Input,
+					"size": finalSize,
+					"recoverLevel": finalRecoverLevel,
 
-	// Then build the response for the client:
-	response := map[string]any{
-		"status": "success",
-		"info": map[string]any{
-			"input": entryData.Input,
-			"size": finalSize,
-			"recoverLevel": finalRecoverLevel,
+				},
+				"qr": qrBase64,
+			}
 
-		},
-		"qr": qrBase64,
-	}
-
-	// Here we encode the response in JSON format and send it to the client:
-	json.NewEncoder(w).Encode(response)
+			// Here we encode the response in JSON format and send it to the client:
+			json.NewEncoder(w).Encode(response)
 }
