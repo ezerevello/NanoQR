@@ -9,14 +9,29 @@ import (
     "strings"
 )
 
-// Create qrService variable for QRService interface with DefualtQRService implementation
-var qrService service.QRService = &service.DefaultQRService{}
+var allowedOrigins = []string {
+	"https://nanoqr-web.vercel.app",
+	"http://localhost:5173",
+	"https://another-web.com",
+}
+
+func isOriginAllowed(origin string) bool {
+
+	for _, o := range allowedOrigins {
+		if o == origin {
+			return true
+		}
+	}
+	return false
+
+}
 
 func CORSMiddleware(next http.Handler) http.Handler {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Add CORS headers
 		origin := r.Header.Get("Origin")
-		if origin == "https://your-web.com" || origin == "https://another-web.com" {
+		if isOriginAllowed(origin) {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
@@ -32,7 +47,11 @@ func CORSMiddleware(next http.Handler) http.Handler {
 		// Call next handler (QRhandler)
 		next.ServeHTTP(w, r)
 	})
+
 }
+
+// Create qrService variable for QRService interface with DefualtQRService implementation
+var qrService service.QRService = &service.DefaultQRService{}
 
 func QRhandler (w http.ResponseWriter, r *http.Request) {
 	
