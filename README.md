@@ -113,11 +113,11 @@ curl -X POST http://localhost:8080/api/qr -H "Content-Type: application/json" -d
 ```
 
 
-## 🌐 CORS Middleware
+### CORS Middleware
 
 NanoQR includes a CORS middleware to allow secure cross-origin requests from your web applications. This middleware automatically adds the necessary CORS headers to responses and handles preflight (OPTIONS) requests for endpoints like `/api/qr`.
 
-### How it works
+#### How it works
 
 - The CORS middleware checks the `Origin` header of incoming requests.
 - If the origin is allowed (see `internal/handlers/http_handler.go`), it sets the following headers:
@@ -128,13 +128,13 @@ NanoQR includes a CORS middleware to allow secure cross-origin requests from you
 - For preflight (OPTIONS) requests, it responds with status 204 and the appropriate headers, without invoking the main handler.
 - For POST requests, it allows the request to proceed to the QR handler as usual.
 
-### Example:
+#### Example:
 
 ```go
 http.Handle("/api/qr", handlers.CORSMiddleware(http.HandlerFunc(handlers.QRhandler)))
 ```
 
-### Customizing Allowed Origins
+#### Customizing Allowed Origins
 
 To allow other origins, edit the logic in `CORSMiddleware` inside `internal/handlers/http_handler.go`.
 
