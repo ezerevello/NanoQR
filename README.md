@@ -102,13 +102,13 @@ curl -X POST http://localhost:8080/api/qr -H "Content-Type: application/json" -d
 
 ```json
 {
-  "status": "success",
   "info": {
     "input": "https://github.com/",
     "size": 512,
     "recoverLevel": "high"
   },
-  "qr": "iVBORw0KGgoAAAANSUhEUgAA..."
+  "qr": "iVBORw0KGgoAAAANSUhEUgAA...",
+  "status": "success"
 }
 ```
 
