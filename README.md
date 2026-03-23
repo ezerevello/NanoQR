@@ -113,7 +113,7 @@ curl -X POST http://localhost:8080/api/qr -H "Content-Type: application/json" -d
 ```
 
 
-## 🌐 CORS Middleware
+### CORS Middleware
 
 NanoQR includes a CORS middleware to allow secure cross-origin requests from your web applications. This middleware automatically adds the necessary CORS headers to responses and handles preflight (OPTIONS) requests for endpoints like `/api/qr`.
 
