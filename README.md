@@ -8,6 +8,7 @@ I created it because I thought the idea was quite fun and an interesting project
 
 Designed to be lightweight and easy to self-host, NanoQR provides a clean API to generate QR codes as Base64-encoded PNGs (or any other encoding you want).
 
+There's also a sample website!: https://nanoqr-web.vercel.app/
 
 -----
 
