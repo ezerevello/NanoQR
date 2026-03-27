@@ -6,9 +6,10 @@
 
 I created it because I thought the idea was quite fun and an interesting project: an (almost) over engineered headless api qr generator and extensible software for multiple handlers.
 
-Designed to be lightweight and easy to self-host, NanoQR provides a clean API to generate QR codes as Base64-encoded PNGs (or any other encoding you want).
+Designed to be lightweight, and **easy to self-host (plug and play)**, NanoQR provides a clean API to generate QR codes as Base64-encoded PNGs (or any other encoding you want).
 
-There's also a sample website!: https://nanoqr-web.vercel.app/
+There's also a sample website!: 
+https://nanoqr-web.vercel.app/
 
 -----
 
